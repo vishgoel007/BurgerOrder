@@ -76,30 +76,43 @@ class BurgerBuilder extends Component {
     this.setState({purchasing: false});
   };
   purchaseContinueHandler = () => {
-    this.setState({loading: true});
-    const orders = {
-      customer:{
-        name: 'testname',
-        address:{
-          country: 'India',
-          state: 'Delhi',
-          street: 'TestStreet'
-        },
-        email: 'test@email.com',
-        ingredients: this.state.ingredients,
-        price: this.state.totalPrice,
-        delivery: 'Standard'
-      }
-    };
-    axios.post('/orders.json', orders)
-      .then(response => {
-        console.log(response);
-        this.setState({loading: false, purchasing: false});
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({loading: false, purchasing: false});
-      });
+    // this.setState({loading: true});
+    // const orders = {
+    //   customer:{
+    //     name: 'testname',
+    //     address:{
+    //       country: 'India',
+    //       state: 'Delhi',
+    //       street: 'TestStreet'
+    //     },
+    //     email: 'test@email.com',
+    //     ingredients: this.state.ingredients,
+    //     price: this.state.totalPrice,
+    //     delivery: 'Standard'
+    //   }
+    // };
+    // axios.post('/orders.json', orders)
+    //   .then(response => {
+    //     console.log(response);
+    //     this.setState({loading: false, purchasing: false});
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //     this.setState({loading: false, purchasing: false});
+    //   });
+
+    const queryParams = [];
+    for(let key in this.state.ingredients){
+      queryParams.push(encodeURIComponent(key) + '=' + encodeURIComponent(this.state.ingredients[key]));
+    }
+    queryParams.push('price=' + this.state.totalPrice);
+
+    const queryString = queryParams.join('&');
+
+    this.props.history.push({
+      pathname:'/checkout',
+      search: '?' + queryString
+    });
 
   };
 
@@ -107,6 +120,7 @@ class BurgerBuilder extends Component {
 
 
   render() {
+    // console.log(this.props);
     const disabledInfo = {...this.state.ingredients};
     for(let key in disabledInfo){
       disabledInfo[key] = disabledInfo[key] <= 0;

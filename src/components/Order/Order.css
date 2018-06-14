@@ -1,0 +1,24 @@
+.Order {
+    width: 80%;
+    padding: 10px;
+    margin: 15px auto;
+    border: 2px solid #743434;
+    box-shadow: 0 2px 3px #cccccc;
+    box-sizing: border-box;
+    transition: all .2s ease-in-out;
+
+}
+
+.Order:hover {
+    transform: scale(1.1);
+
+}
+
+.Item {
+    text-transform: capitalize;
+    display: inline-block;
+    border: 1px solid rgb(183, 145, 55);;
+    margin: 0 10px;
+    padding: 2px 10px;
+
+}

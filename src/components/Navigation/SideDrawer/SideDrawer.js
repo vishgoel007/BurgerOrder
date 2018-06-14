@@ -1,3 +1,4 @@
+// sidebar for mobile size screen
 import React from 'react';
 import Logo from '../../Logo/Logo';
 import classes from './SideDrawer.css';
