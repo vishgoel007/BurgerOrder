@@ -14,12 +14,12 @@ class ContactForm extends Component {
           type: 'text',
           placeholder: 'Your Name'
         },
+        value: '',
         validation: {
           required: true
         },
         valid: false,
-        touched: false,
-        value: ''
+        touched: false
       },
 
       street: {
@@ -28,12 +28,12 @@ class ContactForm extends Component {
           type: 'text',
           placeholder: 'Street'
         },
+        value: '',
         validation: {
           required: true
         },
         valid: false,
-        touched: false,
-        value: ''
+        touched: false
       },
 
       zipCode: {
@@ -42,14 +42,15 @@ class ContactForm extends Component {
           type: 'text',
           placeholder: 'Your ZipCode'
         },
+        value: '',
         validation: {
           required: true,
           minLength: 5,
-          maxLength: 5
+          maxLength: 5,
+          isNumeric: true
         },
         valid: false,
         touched: false,
-        value: ''
       },
 
       country: {
@@ -58,12 +59,12 @@ class ContactForm extends Component {
           type: 'text',
           placeholder: 'Your Country'
         },
+        value: '',
         validation: {
           required: true
         },
         valid: false,
-        touched: false,
-        value: ''
+        touched: false
       },
 
       email: {
@@ -71,14 +72,14 @@ class ContactForm extends Component {
         elementConfig: {
           type: 'email',
           placeholder: 'Your Email-id',
-          pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/
         },
+        value: '',
         validation: {
-          required: true
+          required: true,
+          isEmail: true
         },
         valid: false,
-        touched: false,
-        value: ''
+        touched: false
       },
 
       deliveryMethod: {
@@ -90,10 +91,10 @@ class ContactForm extends Component {
             {value:'cheapest', displayValue:'Cheapest'}
           ]
         },
+        value: 'fastest',
         validation: {},
         valid: true,
-        touched: false,
-        value: 'fastest'
+        touched: false
       }
     },
     formIsValid: false,
@@ -129,21 +130,27 @@ class ContactForm extends Component {
 
   };
 
-  checkValidity = (inputElement) => {
-    if(!inputElement.validation) { //for delivery
+  checkValidity = (value, rules) => {
+    if(!rules) {
       return true;
     }
-    if(inputElement.elementConfig.type === 'email'){ // for email
-      return inputElement.value.match(inputElement.elementConfig.pattern);
-    }
 
-    let isValid = true; // for rest
-    if(inputElement.validation.required){
-      isValid = inputElement.value.trim() !== '' && isValid;
+    let isValid = true;
+    if(rules.required){
+      isValid = value.trim() !== '' && isValid;
     }
-    if(inputElement.validation.minLength && inputElement.validation.maxLength){ // for zipCode
-      isValid = inputElement.value.length >= inputElement.validation.minLength &&
-                inputElement.value.length <= inputElement.validation.maxLength && isValid;
+    if(rules.minLength && rules.maxLength){
+      isValid = value.length >= rules.minLength &&
+                value.length <= rules.maxLength && isValid;
+    }
+    if(rules.isEmail){
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+    }
+    if(rules.isNumeric){
+      const pattern = /^\d+$/;
+      isValid = pattern.test(value) && isValid;
+
     }
 
     return isValid;
@@ -155,7 +162,7 @@ class ContactForm extends Component {
     const updatedOrderForm = {...this.state.orderForm};
     const updatedFormEle = {...updatedOrderForm[inputType]};
     updatedFormEle.value = event.target.value;
-    updatedFormEle.valid = this.checkValidity(updatedFormEle);
+    updatedFormEle.valid = this.checkValidity(updatedFormEle.value, updatedFormEle.validation);
     updatedFormEle.touched = true;
     updatedOrderForm[inputType] = updatedFormEle;
 
