@@ -15,10 +15,7 @@ const sideDrawer = (props) => {
   return(
       <AUX>
         <BackDrop show={props.open} clicked={props.close}/>
-        <div className={attachedClasses.join(' ')}>
-          <div style={{textAlign:'Right', fontSize: '25px'}}>
-            <span onClick={props.close} style={{color: '#795548'}} className="fas fa-window-close"/>
-          </div>
+        <div className={attachedClasses.join(' ')} onClick={props.close}>
           <div className={classes.Logo}>
             <Logo/>
           </div>

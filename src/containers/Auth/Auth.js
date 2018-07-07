@@ -6,6 +6,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/index';
+import {updateObject, checkValidity} from "../../shared/utility";
 
 class Auth extends Component {
   state = {
@@ -43,32 +44,6 @@ class Auth extends Component {
     isSignUp: true
   };
 
-  checkValidity = (value, rules) => {
-    if(!rules) {
-      return true;
-    }
-
-    let isValid = true;
-    if(rules.required){
-      isValid = value.trim() !== '' && isValid;
-    }
-    if(rules.minLength){
-      isValid = value.length >= rules.minLength && isValid
-    }
-    if(rules.maxLength){
-      isValid = value.length <= rules.maxLength && isValid
-    }
-    if(rules.isEmail){
-      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-      isValid = pattern.test(value) && isValid;
-    }
-    if(rules.isNumeric){
-      const pattern = /^\d+$/;
-      isValid = pattern.test(value) && isValid;
-
-    }
-    return isValid;
-  };
 
   componentDidMount () {
     if(!this.props.buildingBurger && this.props.authRedirectPath !== '/') {
@@ -77,15 +52,13 @@ class Auth extends Component {
   }
 
   inputChangeHandler = (event, inputType) => {
-    const updatedControls = {
-        ...this.state.controls,
-      [inputType]: {
-          ...this.state.controls[inputType],
+    const updatedControls = updateObject(this.state.controls, {
+      [inputType]: updateObject(this.state.controls[inputType], {
         value: event.target.value,
-        valid: this.checkValidity(event.target.value, this.state.controls[inputType].validation),
+        valid: checkValidity(event.target.value, this.state.controls[inputType].validation),
         touched: true
-      }
-    };
+      })
+    });
     let formIsValid = true;
     for(let input in updatedControls){
       formIsValid = updatedControls[input].valid && formIsValid;
