@@ -10,13 +10,13 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import {connect} from 'react-redux';
 import * as actions from '../../store/actions/index';
 
-class BurgerBuilder extends Component {
+export class BurgerBuilder extends Component {
   state = {
     purchasing: false
   };
 
   componentDidMount () {
-    this.props.onInitIngredient();
+    this.props.onInitIngredients();
   }
 
 
@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     onIngredientAdded: (ingredName) => dispatch(actions.addIngredient(ingredName)),
     onIngredientRemoved: (ingredName) => dispatch(actions.removeIngredient(ingredName)),
-    onInitIngredient: () => dispatch(actions.initIngredients()),
+    onInitIngredients: () => dispatch(actions.initIngredients()),
     onInitPurchase: () => dispatch(actions.purchaseInit()),
     onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
   };
