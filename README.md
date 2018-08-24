@@ -1,3 +1,4 @@
 # BurgerBuilder
-Simple react app for ordering burger
-Firebase database is used
+Simple react app for ordering burger.
+
+Using Firebase databse.
