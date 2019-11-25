@@ -1,4 +1,4 @@
 # BurgerOrder
 Simple react app for ordering burger.
 
-Using Firebase databse.
+Using Firebase database.
